@@ -14,3 +14,5 @@ export const App = () => {
     </div>
   );
 };
+
+{/* <Searchbar>, <ImageGallery>, <ImageGalleryItem>, <Loader>, <Button> і <Modal></Modal> */}
