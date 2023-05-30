@@ -1,15 +1,14 @@
-import React from 'react';
-
-
-const Modal =({}) {
-
-
+import React, { Component } from 'react';
+import {Overlay, ModalImg} from './Modal.styled';
+class Modal extends Component {
+  render(){
+    return (<Overlay>
+    <ModalImg>
+      <img src="" alt="" />
+    </ModalImg>
+    </Overlay>)
+  }
 }
 
+export default Modal;
 
-
-<div class="overlay">
-  <div class="modal">
-    <img src="" alt="" />
-  </div>
-</div>
