@@ -15,4 +15,5 @@ export const App = () => {
   );
 };
 
-{/* <Searchbar>, <ImageGallery>, <ImageGalleryItem>, <Loader>, <Button> і <Modal></Modal> */}
+// {/* <Searchbar>, <ImageGallery>, <ImageGalleryItem>, <Loader>, <Button> і <Modal></Modal> */}
+
