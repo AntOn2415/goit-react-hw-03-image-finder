@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import {GalleryLi} from './GalleryItem.styled';
-class GalleryItem extends Component {
+import {GalleryLi} from './ImageGalleryItem.styled';
+class ImageGalleryItem extends Component {
+
   render(){
+    const { webformatURL, tags } = this.props;
     return (
-    <GalleryLi>
+      <GalleryLi>
+        <img src={webformatURL} alt={tags} />
     </GalleryLi>
     )
   }
 }
 
-export default GalleryItem;
+export default ImageGalleryItem;
