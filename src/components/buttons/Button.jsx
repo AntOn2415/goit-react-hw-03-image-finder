@@ -15,17 +15,6 @@ export default Button;
 //   constructor({ selector, hidden = false }) {
 //     this.refs = this.getRefs(selector);
 
-//     hidden && this.hide();
-//   }
-
-//   getRefs(selector) {
-//     const refs = {};
-//     refs.button = document.querySelector(selector);
-//     refs.label = refs.button.querySelector('.textBtn');
-//     refs.spinner = refs.button.querySelector('.spinner');
-
-//     return refs;
-//   }
 
 //   enable() {
 //     this.refs.button.disabled = false;

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import galleryApi from '../../servise/CalleryApi';
 import { toast } from 'react-toastify';
-import LoaderReact from '../loader';
+import LoaderReact from '../loaders';
 import { GalleryUl } from './ImageGallery.styled';
-import ImageGalleryItem from '../imageGalleryItem';
-import Modal from '../modal';
+import ImageGalleryItem from '../imageGalleryItems';
+import Modal from '../modals';
 
 class ImageGallery extends Component {
   state = {
@@ -48,11 +48,14 @@ class ImageGallery extends Component {
 
   handleImageClick = (imageUrl, tags) => {
     this.setState({ selectedImage: { url: imageUrl, alt: tags }, showModal: true });
+    
   };
 
   handleCloseModal = () => {
     this.setState({ selectedImage: '', showModal: false });
   };
+
+
 
   render() {
     const { gallery, status, selectedImage, showModal } = this.state;
