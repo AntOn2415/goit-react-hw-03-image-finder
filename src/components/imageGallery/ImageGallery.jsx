@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import galleryApi from '../../servise/CalleryApi';
 import { toast } from 'react-toastify';
-import LoaderReact from '../loaders';
+import LoaderReact from '../loader';
 import { GalleryUl } from './ImageGallery.styled';
-import ImageGalleryItem from '../imageGalleryItems';
-import Modal from '../modals';
+import ImageGalleryItem from '../imageGalleryItem';
+import Modal from '../modal';
 
 class ImageGallery extends Component {
   state = {

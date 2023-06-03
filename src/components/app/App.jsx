@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ContainerDiv } from './App.styled';
-import SearchbarHeader from '../searchbars';
-import ImageGallery from '../imageGallerys';
-import Button from 'components/buttons/Button';
+import SearchbarHeader from '../searchbar';
+import ImageGallery from '../imageGallery';
+import Button from 'components/button/Button';
 class App extends Component {
   state = {
     searchQuery: '',
