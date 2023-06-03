@@ -1,3 +1,16 @@
+
+import React from 'react';
+import { LoadMoreBtn } from './Button.styled';
+
+const Button = () => {
+  return (
+    <LoadMoreBtn type='button'>
+Load more
+    </LoadMoreBtn>
+  );
+};
+
+export default Button;
 // class LoadMoreBtn {
 //   constructor({ selector, hidden = false }) {
 //     this.refs = this.getRefs(selector);

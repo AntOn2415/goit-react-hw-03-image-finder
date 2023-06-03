@@ -35,4 +35,3 @@ if(e.currentTarget === e.target) {
 
 export default Modal;
 
-// {/* <img src="" alt="" /> */}

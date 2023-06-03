@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import galleryApi from '../../servise/CalleryApi';
+import { toast } from 'react-toastify';
+import LoaderReact from '../loader';
 import { GalleryUl } from './ImageGallery.styled';
 import ImageGalleryItem from '../imageGalleryItem';
+import Modal from '../modal';
 
-const BASE_URL = `https://pixabay.com/api/`;
-const apiKey = '35375960-33ece11f0993b514084206b61';
 class ImageGallery extends Component {
   state = {
     page: 1,
-    loading: false,
     gallery: null,
     error: null,
+    status: 'idle',
+    selectedImage: '',
+    showModal: false,
   };
 
   async componentDidUpdate(prevProps, prevState) {
@@ -19,18 +22,18 @@ class ImageGallery extends Component {
     if (prevQuery !== nextQuery) {
       this.resetPage();
 
-      this.setState({ loading: true });
+      this.setState({ status: 'pending' });
       try {
-        const response = await axios.get(
-          `${BASE_URL}?key=${apiKey}&q=${nextQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=12&page=${this.state.page}`
-        );
-        const gallery = response.data.hits;
-        this.setState({ gallery });
+        const gallery = await galleryApi.fetchGallery(nextQuery, this.state.page);
+
+        if (gallery.length === 0) {
+          toast.error('Sorry, there are no images matching your search query. Please try again.');
+        }
+
+        this.setState({ gallery, status: 'resolved' });
         this.incrementPage();
       } catch (error) {
-        this.setState({error});
-      } finally {
-        this.setState({ loading: false });
+        this.setState({ error, status: 'rejected' });
       }
     }
   }
@@ -43,28 +46,44 @@ class ImageGallery extends Component {
     this.setState({ page: 1 });
   }
 
-  handleImageClick = imageUrl => {
-    this.setState({ selectedImage: imageUrl });
-    this.toggleModal();
+  handleImageClick = (imageUrl, tags) => {
+    this.setState({ selectedImage: { url: imageUrl, alt: tags }, showModal: true });
+  };
+
+  handleCloseModal = () => {
+    this.setState({ selectedImage: '', showModal: false });
   };
 
   render() {
-    const { loading, gallery } = this.state;
-    const { searchQuery } = this.props;
-    return (
-      <GalleryUl>
-        {loading && <h2>Загруз...</h2>}
-        {gallery && gallery.map(image => (
-          <ImageGalleryItem
-            key={image.id}
-            webformatURL={image.webformatURL}
-            tags={image.tags}
-            searchQuery={searchQuery}
-            onClick={() => this.handleImageClick(image.largeImageURL)}
-          />
-        ))}
-      </GalleryUl>
-    );
+    const { gallery, status, selectedImage, showModal } = this.state;
+    if (status === 'idle') {
+      return null;
+    }
+    if (status === 'pending') {
+      return <LoaderReact />;
+    }
+    if (status === 'rejected') {
+      return null;
+    }
+    if (status === 'resolved') {
+      return (
+        <GalleryUl>
+          {gallery.map((image) => (
+            <ImageGalleryItem
+              key={image.id}
+              webformatURL={image.webformatURL}
+              tags={image.tags}
+              onClick={() => this.handleImageClick(image.largeImageURL)}
+            />
+          ))}
+          {showModal && (
+            <Modal onClose={this.handleCloseModal}>
+              <img src={selectedImage.url} alt={selectedImage.alt} />
+            </Modal>
+          )}
+        </GalleryUl>
+      );
+    }
   }
 }
 

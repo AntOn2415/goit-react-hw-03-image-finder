@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {toast} from 'react-toastify'
+import PropTypes from 'prop-types';
 import { SearchbarHeader, SearchForm, SearchFormButton, ButtonLabel, Input} from './Searchbar.styled';
 class Searchbar extends Component {
   state = {
@@ -34,7 +35,7 @@ class Searchbar extends Component {
         name='searchQuery'
         value={this.state.searchQuery}
         onChange={this.handleSearchQueryChange}
-        autocomplete="off"
+        autoComplete="off"
         autoFocus
         placeholder="Search images and photos"
       />
@@ -42,5 +43,9 @@ class Searchbar extends Component {
   </SearchbarHeader>)
   }
 }
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
 
 export default Searchbar;
