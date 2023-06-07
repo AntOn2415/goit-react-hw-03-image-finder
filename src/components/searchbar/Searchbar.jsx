@@ -1,46 +1,53 @@
 import React, { Component } from 'react';
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
-import { SearchbarHeader, SearchForm, SearchFormButton, ButtonLabel, Input} from './Searchbar.styled';
+import {
+  SearchbarHeader,
+  SearchForm,
+  SearchFormButton,
+  ButtonLabel,
+  Input,
+} from './Searchbar.styled';
 class Searchbar extends Component {
   state = {
     searchQuery: '',
   };
 
   handleSearchQueryChange = e => {
-    this.setState({searchQuery: e.currentTarget.value.toLowerCase()})
+    this.setState({ searchQuery: e.currentTarget.value.toLowerCase() });
   };
 
   handleSubmit = e => {
     e.preventDefault();
 
-    if(this.state.searchQuery.trim() === '') {
-      toast.info("Please enter a search query");
+    if (this.state.searchQuery.trim() === '') {
+      toast.info('Please enter a search query');
       return;
     }
     this.props.onSubmit(this.state.searchQuery);
-    this.setState({searchQuery: ''})
-  }
+    this.setState({ searchQuery: '' });
+  };
 
-  render(){
+  render() {
     return (
-    <SearchbarHeader>
-    <SearchForm onSubmit={this.handleSubmit}>
-      <SearchFormButton type="submit">
-        <ButtonLabel>Search</ButtonLabel>
-      </SearchFormButton>
-  
-      <Input
-        type="text"
-        name='searchQuery'
-        value={this.state.searchQuery}
-        onChange={this.handleSearchQueryChange}
-        autoComplete="off"
-        autoFocus
-        placeholder="Search images and photos"
-      />
-    </SearchForm>
-  </SearchbarHeader>)
+      <SearchbarHeader>
+        <SearchForm onSubmit={this.handleSubmit}>
+          <SearchFormButton type="submit">
+            <ButtonLabel>Search</ButtonLabel>
+          </SearchFormButton>
+
+          <Input
+            type="text"
+            name="searchQuery"
+            value={this.state.searchQuery}
+            onChange={this.handleSearchQueryChange}
+            autoComplete="off"
+            autoFocus
+            placeholder="Search images and photos"
+          />
+        </SearchForm>
+      </SearchbarHeader>
+    );
   }
 }
 

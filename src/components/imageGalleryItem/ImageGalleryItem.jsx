@@ -1,21 +1,5 @@
-// import React from 'react';
-// import { GalleryLi } from './ImageGalleryItem.styled';
-
-// const ImageGalleryItem = ({ webformatURL, tags, onClickImg }) => {
-//   const handleClick = () => {
-//     onClickImg(webformatURL);
-//   };
-
-//   return (
-//     <GalleryLi>
-//       <img onClick={handleClick} src={webformatURL} alt={tags} />
-//     </GalleryLi>
-//   );
-// };
-
-// export default ImageGalleryItem;
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import { GalleryLi } from './ImageGalleryItem.styled';
 
 const ImageGalleryItem = ({ webformatURL, tags, onClick }) => {
@@ -24,6 +8,12 @@ const ImageGalleryItem = ({ webformatURL, tags, onClick }) => {
       <img onClick={onClick} src={webformatURL} alt={tags} />
     </GalleryLi>
   );
+};
+
+ImageGalleryItem.propTypes = {
+  webformatURL: PropTypes.string.isRequired,
+  tags: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default ImageGalleryItem;

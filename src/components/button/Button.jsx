@@ -1,40 +1,17 @@
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import { LoadMoreBtn } from './Button.styled';
 
-const Button = () => {
+const Button = ({ onClick }) => {
   return (
-    <LoadMoreBtn type='button'>
-Load more
+    <LoadMoreBtn type="button" onClick={onClick}>
+      Load more
     </LoadMoreBtn>
   );
 };
 
+Button.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};
+
 export default Button;
-// class LoadMoreBtn {
-//   constructor({ selector, hidden = false }) {
-//     this.refs = this.getRefs(selector);
-
-
-//   enable() {
-//     this.refs.button.disabled = false;
-//     this.refs.label.textContent = 'Load more';
-//     this.refs.spinner.classList.add('is-hidden');
-//   }
-
-//   disabled() {
-//     this.refs.button.disabled = true;
-//     this.refs.label.textContent = 'Loading';
-//     this.refs.spinner.classList.remove('is-hidden');
-//   }
-
-//   show() {
-//     this.refs.button.classList.remove('is-hidden');
-//   }
-
-//   hide() {
-//     this.refs.button.classList.add('is-hidden');
-//   }
-// }
-
-// export { LoadMoreBtn };

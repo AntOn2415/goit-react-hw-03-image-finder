@@ -10,7 +10,7 @@ display: flex;
 justify-content: center;
 align-items: center;
 background-color: rgba(0, 0, 0, 0.8);
-// z-index: 1200;
+z-index: 1200;
 `
 export const ModalContent = styled.div`
 max-width: calc(100vw - 48px);

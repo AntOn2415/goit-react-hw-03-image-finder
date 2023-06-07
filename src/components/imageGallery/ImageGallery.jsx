@@ -1,93 +1,125 @@
-import React, { Component } from 'react';
-import galleryApi from '../../servise/CalleryApi';
+import React, { Component, createRef } from 'react';
 import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 import LoaderReact from '../loader';
 import { GalleryUl } from './ImageGallery.styled';
 import ImageGalleryItem from '../imageGalleryItem';
-import Modal from '../modal';
+import galleryApi from '../../servise/GalleryApi';
 
 class ImageGallery extends Component {
-  state = {
-    page: 1,
-    gallery: null,
-    error: null,
-    status: 'idle',
-    selectedImage: '',
-    showModal: false,
+  galleryRef = createRef();
+
+  static propTypes = {
+    searchQuery: PropTypes.string.isRequired,
+    page: PropTypes.number.isRequired,
+    onLoadMoreBtnStatusChange: PropTypes.func.isRequired,
+    handleImageClick: PropTypes.func.isRequired,
   };
 
-  async componentDidUpdate(prevProps, prevState) {
-    const prevQuery = prevProps.searchQuery;
-    const nextQuery = this.props.searchQuery;
-    if (prevQuery !== nextQuery) {
-      this.resetPage();
+  state = {
+    gallery: [],
+    error: null,
+    status: 'idle',
+    prevQuery: '',
+    prevPage: 0,
+  };
 
+  async componentDidUpdate(prevProps) {
+    const { searchQuery, page } = this.props;
+
+    if (prevProps.searchQuery !== searchQuery) {
+      this.setState({ gallery: [], status: 'idle', prevPage: 0 });
+    }
+
+    if (prevProps.searchQuery !== searchQuery || prevProps.page !== page) {
       this.setState({ status: 'pending' });
+
       try {
-        const gallery = await galleryApi.fetchGallery(nextQuery, this.state.page);
+        const newGallery = await galleryApi.fetchGallery(searchQuery, page);
 
-        if (gallery.length === 0) {
-          toast.error('Sorry, there are no images matching your search query. Please try again.');
+        if (newGallery.length === 0) {
+          if (this.state.gallery.length === 0) {
+            toast.error(
+              'Sorry, there are no images matching your search query. Please try again.'
+            );
+          }
+        } else {
+          this.setState(
+            prevState => ({
+              gallery: [...prevState.gallery, ...newGallery],
+              status: 'resolved',
+            }),
+            () => {
+              if (newGallery.length < 12) {
+                this.props.onLoadMoreBtnStatusChange(false);
+                toast.info(
+                  "We're sorry, but you've reached the end of search results."
+                );
+              } else {
+                this.props.onLoadMoreBtnStatusChange(true);
+              }
+              this.scrollToOldGallery();
+            }
+          );
         }
-
-        this.setState({ gallery, status: 'resolved' });
-        this.incrementPage();
       } catch (error) {
-        this.setState({ error, status: 'rejected' });
+        this.setState({ status: 'rejected' });
+        toast.error('Error occurred while loading images.');
       }
     }
   }
 
-  incrementPage() {
-    this.setState(({ page }) => ({ page: (page += 1) }));
-  }
+  scrollToOldGallery = () => {
+    const galleryElement = this.galleryRef.current;
+    const imageElements = galleryElement.querySelectorAll('li');
 
-  resetPage() {
-    this.setState({ page: 1 });
-  }
+    if (imageElements.length >= 12) {
+      const targetImage = imageElements[imageElements.length - 6];
 
-  handleImageClick = (imageUrl, tags) => {
-    this.setState({ selectedImage: { url: imageUrl, alt: tags }, showModal: true });
-    
+      if (targetImage) {
+        targetImage.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }
+    }
   };
-
-  handleCloseModal = () => {
-    this.setState({ selectedImage: '', showModal: false });
-  };
-
-
 
   render() {
-    const { gallery, status, selectedImage, showModal } = this.state;
-    if (status === 'idle') {
+    const { gallery, status } = this.state;
+
+    if (status === 'idle' || gallery.length === 0) {
       return null;
     }
+
     if (status === 'pending') {
       return <LoaderReact />;
     }
+
     if (status === 'rejected') {
-      return null;
+      return <div>Error occurred while loading images.</div>;
     }
+
     if (status === 'resolved') {
       return (
-        <GalleryUl>
-          {gallery.map((image) => (
+        <GalleryUl ref={this.galleryRef}>
+          {gallery.map(image => (
             <ImageGalleryItem
               key={image.id}
               webformatURL={image.webformatURL}
               tags={image.tags}
-              onClick={() => this.handleImageClick(image.largeImageURL)}
+              onClick={() =>
+                this.props.handleImageClick(image.largeImageURL, image.tags)
+              }
             />
           ))}
-          {showModal && (
-            <Modal onClose={this.handleCloseModal}>
-              <img src={selectedImage.url} alt={selectedImage.alt} />
-            </Modal>
-          )}
+          <li name="oldGallery" />
         </GalleryUl>
       );
     }
+
+    return null;
   }
 }
 
 export default ImageGallery;
+
+
+

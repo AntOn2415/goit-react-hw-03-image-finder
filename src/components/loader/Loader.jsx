@@ -1,25 +1,25 @@
 import React, { Component } from 'react';
 import { Oval } from 'react-loader-spinner';
-import {LoaderReact} from './Loader.styled';
+import { LoaderReact } from './Loader.styled';
 class Loader extends Component {
-  render(){
+  render() {
     return (
-    <LoaderReact>
-  <Oval
-  height={40}
-  width={40}
-  color="#3f51b5"
-  wrapperStyle={{}}
-  wrapperClass=""
-  visible={true}
-  ariaLabel='oval-loading'
-  secondaryColor="#303f9f"
-  strokeWidth={4}
-  strokeWidthSecondary={4}
-/>
-<p>loading...</p>
-    </LoaderReact>
-    )
+      <LoaderReact>
+        <Oval
+          height={40}
+          width={40}
+          color="#3f51b5"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+          ariaLabel="oval-loading"
+          secondaryColor="#303f9f"
+          strokeWidth={4}
+          strokeWidthSecondary={4}
+        />
+        <p>loading...</p>
+      </LoaderReact>
+    );
   }
 }
 
