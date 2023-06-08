@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ContainerDiv } from './App.styled';
-import SearchbarHeader from '../searchbar';
-import ImageGallery from '../imageGallery';
-import Button from '../button/Button';
-import Modal from '../modal';
-import LoaderReact from '../loader';
+import SearchbarHeader from '../Searchbars';
+import ImageGallery from '../ImageGallerys';
+import Button from '../Buttons/Button';
+import Modal from '../Modals';
+import LoaderReact from '../Loaders';
 
 class App extends Component {
   state = {

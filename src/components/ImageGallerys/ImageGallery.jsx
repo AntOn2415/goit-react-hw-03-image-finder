@@ -1,9 +1,9 @@
 import React, { Component, createRef } from 'react';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
-import LoaderReact from '../loader';
+import LoaderReact from '../Loaders';
 import { GalleryUl } from './ImageGallery.styled';
-import ImageGalleryItem from '../imageGalleryItem';
+import ImageGalleryItem from '../ImageGalleryItems';
 import galleryApi from '../../servise/GalleryApi';
 
 class ImageGallery extends Component {
