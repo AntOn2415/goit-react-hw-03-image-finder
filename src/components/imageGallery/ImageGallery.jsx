@@ -14,6 +14,7 @@ class ImageGallery extends Component {
     page: PropTypes.number.isRequired,
     onLoadMoreBtnStatusChange: PropTypes.func.isRequired,
     handleImageClick: PropTypes.func.isRequired,
+    onGalleryStatusChange: PropTypes.func.isRequired,
   };
 
   state = {
@@ -33,16 +34,17 @@ class ImageGallery extends Component {
 
     if (prevProps.searchQuery !== searchQuery || prevProps.page !== page) {
       this.setState({ status: 'pending' });
+      this.props.onLoadMoreBtnStatusChange(false);
 
       try {
         const newGallery = await galleryApi.fetchGallery(searchQuery, page);
 
         if (newGallery.length === 0) {
-          if (this.state.gallery.length === 0) {
-            toast.error(
-              'Sorry, there are no images matching your search query. Please try again.'
-            );
-          }
+          this.setState({ status: 'pending' });
+          this.props.onGalleryStatusChange('idle');
+          toast.error(
+            'Sorry, there are no images matching your search query. Please try again.'
+          );
         } else {
           this.setState(
             prevState => ({
@@ -59,12 +61,16 @@ class ImageGallery extends Component {
                 this.props.onLoadMoreBtnStatusChange(true);
               }
               this.scrollToOldGallery();
+              this.props.onGalleryStatusChange('resolved');
             }
           );
         }
       } catch (error) {
         this.setState({ status: 'rejected' });
-        toast.error('Error occurred while loading images.');
+        toast.error(
+          'An error occurred while loading images. Please check your internet connection'
+        );
+        this.props.onGalleryStatusChange('idle');
       }
     }
   }
@@ -120,6 +126,3 @@ class ImageGallery extends Component {
 }
 
 export default ImageGallery;
-
-
-

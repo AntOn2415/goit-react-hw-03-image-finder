@@ -6,6 +6,7 @@ import SearchbarHeader from '../searchbar';
 import ImageGallery from '../imageGallery';
 import Button from '../button/Button';
 import Modal from '../modal';
+import LoaderReact from '../loader';
 
 class App extends Component {
   state = {
@@ -15,17 +16,18 @@ class App extends Component {
     gallery: [],
     page: 1,
     showLoadMoreBtn: false,
+    status: 'idle',
   };
 
   handleFormSubmit = searchQuery => {
     const { searchQuery: prevSearchQuery } = this.state;
-
     if (prevSearchQuery !== searchQuery) {
       this.setState({
         searchQuery,
         page: 1,
         gallery: [],
         showLoadMoreBtn: false,
+        status: 'pending',
       });
     }
   };
@@ -49,6 +51,10 @@ class App extends Component {
     this.setState({ showLoadMoreBtn: status });
   };
 
+  handleGalleryStatusChange = status => {
+    this.setState({ status });
+  };
+
   render() {
     const {
       searchQuery,
@@ -57,6 +63,7 @@ class App extends Component {
       gallery,
       showLoadMoreBtn,
       page,
+      status,
     } = this.state;
 
     return (
@@ -69,7 +76,10 @@ class App extends Component {
           gallery={gallery}
           page={page}
           onLoadMoreBtnStatusChange={this.handleLoadMoreBtnStatusChange}
+          onGalleryStatusChange={this.handleGalleryStatusChange}
         />
+
+        {status === 'pending' && <LoaderReact />}
 
         {showModal && (
           <Modal onClose={this.handleCloseModal}>

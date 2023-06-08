@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
 import { Oval } from 'react-loader-spinner';
 import { LoaderReact } from './Loader.styled';
-class Loader extends Component {
-  render() {
+
+const Loader = () => {
     return (
       <LoaderReact>
         <Oval
@@ -21,6 +20,5 @@ class Loader extends Component {
       </LoaderReact>
     );
   }
-}
 
 export default Loader;
