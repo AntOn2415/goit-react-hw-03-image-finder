@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { ContainerDiv } from './App.styled';
+import { animateScroll as scroll } from 'react-scroll';
 import SearchbarHeader from '../Searchbar';
 import ImageGallery from '../ImageGallery';
 import Button from '../Button';
 import Modal from '../Modal';
 import LoaderReact from '../Loader';
 import { fetchGallery, perPage } from '../../servise/GalleryApi';
-import { animateScroll as scroll } from 'react-scroll';
+import 'react-toastify/dist/ReactToastify.css';
+import { ContainerDiv } from './App.styled';
 
 class App extends Component {
   state = {
@@ -102,19 +102,12 @@ class App extends Component {
   };
 
   render() {
-    const {
-      gallery,
-      showModal,
-      selectedImage,
-      showLoadMoreBtn,
-      loading,
-    } = this.state;
+    const { gallery, showModal, selectedImage, showLoadMoreBtn, loading } =
+      this.state;
 
     return (
       <ContainerDiv>
-        <SearchbarHeader
-          onSubmit={this.handleFormSubmit}
-        />
+        <SearchbarHeader onSubmit={this.handleFormSubmit} />
 
         {gallery.length > 0 && (
           <ImageGallery

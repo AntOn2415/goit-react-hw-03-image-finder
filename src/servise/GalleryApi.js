@@ -17,5 +17,5 @@ async function fetchGallery(searchQuery, page) {
   }
 }
 
-export {fetchGallery};
-export  {perPage};
+export { fetchGallery };
+export { perPage };
