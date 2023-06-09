@@ -8,6 +8,7 @@ import {
   ButtonLabel,
   Input,
 } from './Searchbar.styled';
+
 class Searchbar extends Component {
   state = {
     searchQuery: '',
