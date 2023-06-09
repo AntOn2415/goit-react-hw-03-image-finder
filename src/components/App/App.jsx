@@ -23,45 +23,63 @@ class App extends Component {
   };
 
   async componentDidUpdate(prevProps, prevState) {
-    const { searchQuery, page, perPage } = this.state;
-
+    const { searchQuery, page } = this.state;
+  
     if (prevState.searchQuery !== searchQuery || prevState.page !== page) {
       if (prevState.searchQuery !== searchQuery) {
-        this.setState({ showLoadMoreBtn: false, gallery: [] });
+        this.clearGallery();
       }
-
+  
       try {
         this.setState({ loading: true });
-
-        const newGallery = await fetchGallery(
-          searchQuery,
-          page,
-          this.state.perPage
-        );
-
+  
+        const newGallery = await this.fetchGalleryData();
+  
         if (newGallery.length === 0) {
-          toast.error(
-            'Sorry, there are no images matching your search query. Please try again.'
-          );
-          this.setState({ loading: false });
-        } else if (newGallery.length < perPage && newGallery.length > 0) {
-          toast.info(
-            "We're sorry, but you've reached the end of search results."
-          );
-          this.setState({ loading: false, showLoadMoreBtn: false });
+          this.handleNoImages();
+        } else if (newGallery.length < this.state.perPage && newGallery.length > 0) {
+          this.handleEndOfResults();
         } else {
-          this.setState(prevState => ({
-            gallery: [...prevState.gallery, ...newGallery],
-            loading: false,
-            showLoadMoreBtn: newGallery.length >= perPage,
-          }));
+          this.updateGallery(newGallery);
         }
+  
         this.scrollToOldGallery();
       } catch (error) {
-        toast.error('An error occurred while loading images.');
-        this.setState({ loading: false });
+        this.handleError();
       }
     }
+  }
+
+  clearGallery() {
+    this.setState({ showLoadMoreBtn: false, gallery: [] });
+  }
+  
+  async fetchGalleryData() {
+    const { searchQuery, page, perPage } = this.state;
+    return await fetchGallery(searchQuery, page, perPage);
+  }
+  
+  handleNoImages() {
+    toast.error('Sorry, there are no images matching your search query. Please try again.');
+    this.setState({ loading: false });
+  }
+  
+  handleEndOfResults() {
+    toast.info("We're sorry, but you've reached the end of search results.");
+    this.setState({ loading: false, showLoadMoreBtn: false });
+  }
+  
+  updateGallery(newGallery) {
+    this.setState(prevState => ({
+      gallery: [...prevState.gallery, ...newGallery],
+      loading: false,
+      showLoadMoreBtn: newGallery.length >= this.state.perPage,
+    }));
+  }
+  
+  handleError() {
+    toast.error('An error occurred while loading images.');
+    this.setState({ loading: false });
   }
 
   scrollToOldGallery = () => {
